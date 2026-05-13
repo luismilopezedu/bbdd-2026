@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 @Configuration
 @EnableWebSecurity
@@ -24,8 +25,14 @@ public class SecurityConfig {
 					.anyRequest()
 					.authenticated())
 					//.permitAll())
+				  .requestCache(cache -> {
+		              HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+		              requestCache.setMatchingRequestParameterName(null);
+		              cache.requestCache(requestCache);
+		          })
 				.formLogin(form -> form
 						.loginPage("/login")
+						.defaultSuccessUrl("/producto/list", true)
 						.permitAll()
 				);
 
@@ -39,7 +46,7 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	@Bean
+	/*@Bean
 	UserDetailsService userDetailsService() {
 		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
@@ -51,6 +58,6 @@ public class SecurityConfig {
 		manager.createUser(admin);
 
 		return manager;
-	}
+	}*/
 
 }
