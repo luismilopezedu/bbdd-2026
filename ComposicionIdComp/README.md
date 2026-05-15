@@ -1,12 +1,12 @@
-# Ejemplo 10 - Asociación de Composición con Identificador Compuesto
+# Ejemplo - Asociación de Composición con Identificador Compuesto
 
 ## Asociaciones de composición
 
-Partimos del mismo problema que ya planteamos en el [ejemplo 3](../Composicion/). Sea el siguiente diagrama de clases de UML.
+Sea el siguiente diagrama de clases de UML.
 
 ![UML](./png/Model!Main_0.png)
 
-El código fuente que generamos en dicha solución era el siguiente:
+El código fuente que generamos inicialmente para solucionar este problema era el siguiente:
 
 
 ```java

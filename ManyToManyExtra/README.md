@@ -1,7 +1,7 @@
 
-# Ejemplo 11 - Ejemplo una asociación _Many To Many_ con atributos extra
+# Ejemplo - Ejemplo una asociación  _Many To Many_  con atributos extra
 
-Partimos desde el ejemplo [many-to-many](../ManyToMany/) con algunas modificaciones:
+Partimos desde una asociación many-to-many para añadir algunas modificaciones:
 
 - Eliminamos la asociación `@ManyToMany` de ambos lados, tanto de `Asignatura` como de `Alumno`, ya que vamos a darle solución de otra forma.
 - Transformamos de `List` a `Set` el tipo de dato de las dos colecciones de las asociaciones `@OneToMany` en curso, ya que si no obtenemos una excepción de tipo  `MultipleFetchBagException`. El próximo curso trabajaremos una solución más adecuada que esta, pero por ahora nos sirve.

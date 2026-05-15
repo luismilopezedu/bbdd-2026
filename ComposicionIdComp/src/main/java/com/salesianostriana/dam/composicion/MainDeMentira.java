@@ -37,7 +37,7 @@ public class MainDeMentira {
 			}
 		}
 		
-		/*for(int i = 3; i<=50;i++) {
+		for(int i = 3; i<=50;i++) {
 		
 			for(int j = 1; j<=6; j++) {
 				airbus320.addAsiento(
@@ -48,7 +48,7 @@ public class MainDeMentira {
 						.build()						
 						);
 			}
-		}*/
+		}
 		
 		repositorio.save(airbus320);
 		
@@ -56,7 +56,7 @@ public class MainDeMentira {
 		airbus320.removeAsiento(asiento);
 		
 		airbus320 = repositorio.save(airbus320);
-
+		
 		repositorio.delete(airbus320);
 
 		
