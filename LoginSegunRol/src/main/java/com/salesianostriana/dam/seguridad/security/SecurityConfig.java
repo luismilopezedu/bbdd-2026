@@ -2,14 +2,10 @@ package com.salesianostriana.dam.seguridad.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,10 +18,10 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
+
 	private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
-	
+
 
 	@Bean
 	InMemoryUserDetailsManager userDetailsService() {
@@ -33,27 +29,27 @@ public class SecurityConfig {
 				.username("admin")
 				.password("{noop}admin")
 				.roles("ADMIN", "USER").build();
-		
+
 		UserDetails user = User.builder()
 				.username("user")
 				.password("{noop}1234")
 				.roles("USER").build();
-		
+
 		UserDetails user2 = User.builder()
 				.username("user2")
 				.password("{noop}5678")
 				.roles("OTHER").build();
-		
-		
+
+
 		return new InMemoryUserDetailsManager(user, admin, user2);
 	}
 
-	
+
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		
-		
+
+
 		// Establecemos como caché de petición NullRequestCache
 		// porque no nos interesa a qué URL iba el usuario, ya que
 		// con el mecanismo de redirección por rol estamos forzando

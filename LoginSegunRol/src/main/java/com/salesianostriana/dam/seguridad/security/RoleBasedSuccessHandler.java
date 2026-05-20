@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -21,65 +20,66 @@ import lombok.extern.java.Log;
 
 @Component
 @Log
-public class RoleBasedSuccessHandler 
+public class RoleBasedSuccessHandler
 	implements AuthenticationSuccessHandler {
-	
+
 	private RedirectStrategy redirectStrategy =
 			new DefaultRedirectStrategy();
-	
+
 	private final String ROLE_USER_URL = "/web/index";
 	private final String ROLE_ADMIN_URL = "/admin/index";
 	private final String ROLE_DEFAULT_URL = "/login?error=Error en el rol asignado";
-	
-	
+
+
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
-		
-		
+
+
 		log.info("Authentication: " + authentication.toString());
-		
+
 		// Determinar el rol de más privilegios, si el usuario tiene más de uno
 		String role = getMaxRole(authentication.getAuthorities());
 
 		log.info("Max role: " + role);
-		
+
 		// En función del rol de más privilegios, redirigir a la URL correcta
 		String redirectUrl = determineTargetUrl(role);
-		
+
 		log.info("Redirect url: " + redirectUrl);
-		
+
 		if (response.isCommitted()) {
 			log.info("Can't redirect");
 			return;
 		}
-		
+
 		redirectStrategy.sendRedirect(request, response, redirectUrl);
-		
-		
+
+
 	}
-	
+
 	private String getMaxRole(Collection<? extends GrantedAuthority> collection) {
 		List<GrantedAuthority> authoritiesList =
 				new ArrayList<>(collection);
-		
+
 		// Usuario autenticado pero sin rol
-		if (authoritiesList.isEmpty())
+		if (authoritiesList.isEmpty()) {
 			return "ROLE_DEFAULT";
-		
+		}
+
 		return authoritiesList
 			.stream()
 			.map(GrantedAuthority::getAuthority)
 			.filter(a -> a.startsWith("ROLE_"))
-			.sorted((role1, role2) -> 
-				role_weight.getOrDefault(role2, Integer.MIN_VALUE) 
+			.sorted((role1, role2) ->
+				role_weight.getOrDefault(role2, Integer.MIN_VALUE)
 					- role_weight.getOrDefault(role1, Integer.MIN_VALUE))
 			.findFirst()
 			.get();
-		
-		
+
+
 	}
-	
+
 	private String determineTargetUrl(String role) {
 		return switch(role) {
 			case "ROLE_ADMIN" -> ROLE_ADMIN_URL;
@@ -87,7 +87,7 @@ public class RoleBasedSuccessHandler
 			default -> ROLE_DEFAULT_URL;
 		};
 	}
-	
+
 	private static Map<String, Integer> role_weight = Map.of(
 			"ROLE_ADMIN", 10,
 			"ROLE_USER", 1
